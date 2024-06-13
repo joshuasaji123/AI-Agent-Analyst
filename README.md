@@ -1,4 +1,3 @@
-Sure, here's the raw text you can copy and paste directly into your `README.md` file:
 
 ```
 # AI-Agent-Analysis
@@ -24,7 +23,7 @@ AI-Agent-Analysis is a comprehensive tool designed to process, analyze, and summ
 1. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/Ai-Agent-Analysis.git
+   git clone https://github.com/joshuasaji123/Ai-Agent-Analysis.git
    cd Ai-Agent-Analysis
    ```
 
