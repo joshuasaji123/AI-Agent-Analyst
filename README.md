@@ -1,5 +1,3 @@
-
-```
 # AI-Agent-Analysis
 
 ## Overview
@@ -22,24 +20,18 @@ AI-Agent-Analysis is a comprehensive tool designed to process, analyze, and summ
 
 1. Clone the repository:
 
-   ```
    git clone https://github.com/joshuasaji123/Ai-Agent-Analysis.git
    cd Ai-Agent-Analysis
-   ```
 
 2. Install dependencies:
 
-   ```
    pip install -r requirements.txt
-   ```
 
 3. Set up environment variables:
 
    Create a `.env` file in the root directory of the project and add your OpenAI API key:
 
-   ```
    OPENAI_API_KEY=your_openai_api_key
-   ```
 
 ## Usage
 
@@ -49,9 +41,7 @@ AI-Agent-Analysis is a comprehensive tool designed to process, analyze, and summ
 
 2. Run the project:
 
-   ```
    python app/main.py
-   ```
 
    The script will read the text file, segment it if necessary, and process it using the selected AI models. The results will be displayed in the console.
 
@@ -61,9 +51,7 @@ By default, the project uses the OpenAI model. You can specify the model type in
 
 Example Configuration in `app/main.py`:
 
-```
 model_type = "gpt-4"  # OpenAI model
-```
 
 ## Logging
 
@@ -83,5 +71,3 @@ This project is licensed under the MIT License.
 ## Acknowledgements
 
 Special thanks to the developers of OpenAI for their powerful AI models.
-```
-
