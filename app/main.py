@@ -2,6 +2,7 @@ import os
 import time
 import openai
 import logging
+from tqdm import tqdm
 from dotenv import load_dotenv
 from agents.bias_detection_agent import BiasDetectionAgent
 from agents.quality_assessment_agent import QualityAssessmentAgent
@@ -20,7 +21,7 @@ def read_text_from_file(filepath):
         return file.read()
 
 # Function for waiting animation with metrics tracking
-def waiting_animation(seconds, api_function, api_function_name, *args, **kwargs):
+def waiting_animation(api_function, api_function_name, *args, **kwargs):
     try:
         start_time = time.time()
         response = api_function(*args, **kwargs)
@@ -72,21 +73,24 @@ def main():
     all_quality_results = []
     all_sme_results = []
 
-    for segment in text_segments:
-        bias_analysis = waiting_animation(3, bias_agent.detect_bias, "Bias Analysis", segment)
-        if bias_analysis["result"]:
-            all_bias_results.append(bias_analysis["result"])
+    # Animation and progress bar
+    with tqdm(total=len(text_segments), desc="Processing segments") as pbar:
+        for segment in text_segments:
+            bias_analysis = waiting_animation(bias_agent.detect_bias, "Bias Analysis", segment)
+            if bias_analysis["result"]:
+                all_bias_results.append(bias_analysis["result"])
 
-        quality_analysis = waiting_animation(3, quality_agent.evaluate, "Quality Assessment", segment)
-        if quality_analysis["result"]:
-            all_quality_results.append(quality_analysis["result"])
+            quality_analysis = waiting_animation(quality_agent.evaluate, "Quality Assessment", segment)
+            if quality_analysis["result"]:
+                all_quality_results.append(quality_analysis["result"])
 
-        sme_analysis = waiting_animation(3, sme_agent.provide_insight, "SME Analysis", segment)
-        if sme_analysis["result"]:
-            all_sme_results.append(sme_analysis["result"])
+            sme_analysis = waiting_animation(sme_agent.provide_insight, "SME Analysis", segment)
+            if sme_analysis["result"]:
+                all_sme_results.append(sme_analysis["result"])
 
-        # Update total time with the maximum time taken among the analyses of this segment
-        total_time += max(bias_analysis["time_taken"], quality_analysis["time_taken"], sme_analysis["time_taken"])
+            # Update total time with the maximum time taken among the analyses of this segment
+            total_time += max(bias_analysis["time_taken"], quality_analysis["time_taken"], sme_analysis["time_taken"])
+            pbar.update(1)
 
     # Combine results into a final comprehensive report
     final_bias_report = "\n\n".join(all_bias_results)
@@ -107,7 +111,11 @@ def main():
     """
 
     print("Compiling summary...")
-    summary = waiting_animation(3, summary_agent.compile_summary, "Summary Compilation", final_bias_report, final_quality_report, final_sme_report)
+    summary_progress_bar = tqdm(total=1, desc="Compiling Summary")
+    summary = waiting_animation(summary_agent.compile_summary, "Summary Compilation", final_bias_report, final_quality_report, final_sme_report)
+    summary_progress_bar.update(1)
+    summary_progress_bar.close()
+
     if summary["result"]:
         total_time += summary["time_taken"]
         print(f"Summary: {summary['result']}\n")
@@ -115,8 +123,21 @@ def main():
     else:
         print(f"Failed to compile Summary.\n")
 
+    proudly_made_by = """
+    
+    Proudly made by
+
+   .-. .----.  .----..-. .-..-. .-.  .--.      .---. .-. .-.  .--.   .---. .-. .-..----. 
+.-.| |/  {}  \{ {__  | {_} || { } | / {} \    /  ___}| {_} | / {} \ /  ___}| |/ //  {}  \
+| {} |\      /.-._} }| { } || {_} |/  /\  \   \     }| { } |/  /\  \\     }| |\ \\      /
+`----' `----' `----' `-' `-'`-----'`-'  `-'    `---' `-' `-'`-'  `-' `---' `-' `-'`----' 
+                                                                                                                                                                    
+                                                                                                                                                                    
+"""
+
     print(full_report)
     print(f"Total time taken: {total_time} seconds")
+    print(proudly_made_by)
 
 if __name__ == "__main__":
     main()
