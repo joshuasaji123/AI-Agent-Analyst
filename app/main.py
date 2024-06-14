@@ -26,7 +26,7 @@ def waiting_animation(api_function, api_function_name, *args, **kwargs):
         start_time = time.time()
         response = api_function(*args, **kwargs)
         end_time = time.time()
-        time_taken = round(end_time - start_time, 2)
+        time_taken = round(end_time - start_time, 3)  # Rounded to nearest millisecond
         print(f"{api_function_name} completed. Time Taken: {time_taken} s")
         logging.info(f"{api_function_name} took {time_taken} seconds.")
         return {"time_taken": time_taken, "result": response}
@@ -138,7 +138,7 @@ def main():
 """
 
     print(full_report)
-    print(f"Total time taken: {total_time} seconds")
+    print(f"Total time taken: {round(total_time, 3)} seconds")  # Rounded to nearest millisecond
     print(proudly_made_by)
 
 if __name__ == "__main__":
